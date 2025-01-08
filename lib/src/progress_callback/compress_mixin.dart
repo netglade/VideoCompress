@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'subscription.dart';
 
 class CompressMixin {
-  final compressProgress$ = ObservableBuilder<double>();
+  StreamController<double> _progressStream = StreamController.broadcast();
+
   final _channel = const MethodChannel('video_compress');
+
+  Stream<double> get progressStream => _progressStream.stream;
 
   @protected
   void initProcessCallback() {
@@ -26,7 +30,7 @@ class CompressMixin {
     switch (call.method) {
       case 'updateProgress':
         final progress = double.tryParse(call.arguments.toString());
-        if (progress != null) compressProgress$.next(progress);
+        if (progress != null) _progressStream.add(progress);
         break;
     }
   }

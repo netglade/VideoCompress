@@ -132,11 +132,6 @@ extension Compress on IVideoCompress {
       Already have a compression process, you need to wait for the process to finish or stop it''');
     }
 
-    if (compressProgress$.notSubscribed) {
-      debugPrint('''VideoCompress: You can try to subscribe to the 
-      compressProgress\$ stream to know the compressing state.''');
-    }
-
     // ignore: invalid_use_of_protected_member
     setProcessingStatus(true);
     final jsonStr = await _invoke<String>('compressVideo', {
