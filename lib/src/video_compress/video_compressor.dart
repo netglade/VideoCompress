@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,9 +36,7 @@ extension Compress on IVideoCompress {
   Future<T?> _invoke<T>(String name, [Map<String, dynamic>? params]) async {
     T? result;
     try {
-      result = params != null
-          ? await channel.invokeMethod(name, params)
-          : await channel.invokeMethod(name);
+      result = params != null ? await channel.invokeMethod(name, params) : await channel.invokeMethod(name);
     } on PlatformException catch (e) {
       debugPrint('''Error from VideoCompress: 
       Method: $name
@@ -167,6 +164,9 @@ extension Compress on IVideoCompress {
   /// If there is no compression process, nothing will happen.
   Future<void> cancelCompression() async {
     await _invoke<void>('cancelCompression');
+
+    // ignore: invalid_use_of_protected_member
+    setProcessingStatus(false);
   }
 
   /// delete the cache folder, please do not put other things
